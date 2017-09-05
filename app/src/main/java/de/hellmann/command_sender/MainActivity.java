@@ -11,6 +11,9 @@ import android.widget.TextView;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,10 +29,15 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SshCommander ssh = new SshCommander();
                 try{
-                    String string = ssh.sendCommand("USERNAME", "KEY_PASSPHRASE", "HOST", 2222, "/home/USERNAME/.ssh/authorized_keys2");
+                    List<String> lines = ssh.sendCommandWithKeyAuthentication("", "", "", 0, "", "");
+                    String string = "";
+                    for (String s : lines)
+                    {
+                        string += s + "\n";
+                    }
                     textView.setText(string);
                 }
-                catch(JSchException ex){
+                catch(Exception ex){
                     String string = ex.getMessage();
                     textView.setText(string);
                 }
