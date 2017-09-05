@@ -12,11 +12,17 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String COMMAND = "";
+    private static final String USERNAME = "";
+    private static final String HOST = "";
+    private static final int SSH_PORT = 0;
+    private static final String PRIVATE_KEY_PATH = "";
+    private static final String KEY_PASSPHRASE = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +35,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SshCommander ssh = new SshCommander();
                 try{
-                    List<String> lines = ssh.sendCommandWithKeyAuthentication("", "", "", 0, "", "");
+                    List<String> lines =
+                            ssh.sendCommandWithKeyAuthentication(
+                                    COMMAND,
+                                    USERNAME,
+                                    HOST,
+                                    SSH_PORT,
+                                    PRIVATE_KEY_PATH,
+                                    KEY_PASSPHRASE);
                     String string = "";
                     for (String s : lines)
                     {
