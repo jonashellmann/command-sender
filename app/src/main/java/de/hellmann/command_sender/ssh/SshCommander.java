@@ -20,29 +20,38 @@ import java.util.Properties;
 
 public class SshCommander {
 
-    public List<String> sendCommandWithPasswordAuthentification()
-    {
-        return null;
-    }
-
-    public List<String> sendCommandWithKeyAuthentication(
+    public List<String> sendCommandWithPasswordAuthentification(
             String command,
             String username,
-            String serverIpAddress,
-            int sshPort,
-            String privateKeyPath,
-            String keyPassphrase) throws JSchException, IOException
+            String password,
+            String host,
+            int sshPort) throws JSchException, IOException
     {
-        JSch jsch = initializeJSchObjectForKeyAuthentication(privateKeyPath, keyPassphrase);
-        Session session = initializeSessionForKeyAuthentication(jsch, username, serverIpAddress, sshPort);
-        //String command = "echo \"Sit down, relax, mix yourself a drink and enjoy the show...\" >> /tmp/test.out";
+        JSch jsch = new JSch();
+        Session session = initializeSessionForPasswordAuthentication(jsch, username, password, host, sshPort);
         ChannelExec channelSsh = sendCommand(session, command);
         List<String> lines = readConsoleOutput(channelSsh);
         disconnect(channelSsh, session);
         return lines;
     }
 
-    public JSch initializeJSchObjectForKeyAuthentication(
+    public List<String> sendCommandWithKeyAuthentication(
+            String command,
+            String username,
+            String host,
+            int sshPort,
+            String privateKeyPath,
+            String keyPassphrase) throws JSchException, IOException
+    {
+        JSch jsch = initializeJSchObjectForKeyAuthentication(privateKeyPath, keyPassphrase);
+        Session session = initializeSessionForKeyAuthentication(jsch, username, host, sshPort);
+        ChannelExec channelSsh = sendCommand(session, command);
+        List<String> lines = readConsoleOutput(channelSsh);
+        disconnect(channelSsh, session);
+        return lines;
+    }
+
+    private JSch initializeJSchObjectForKeyAuthentication(
             String privateKeyPath,
             String passphrase) throws JSchException
     {
@@ -51,13 +60,25 @@ public class SshCommander {
         return jsch;
     }
 
-    public Session initializeSessionForKeyAuthentication(
+    private Session initializeSessionForPasswordAuthentication(
             JSch jsch,
             String username,
-            String serverIpAddress,
+            String password,
+            String host,
             int sshPort) throws JSchException
     {
-        Session session = jsch.getSession(username, serverIpAddress, sshPort);
+        Session session = jsch.getSession(username, host, sshPort);
+        session.setPassword(password);
+        return session;
+    }
+
+    private Session initializeSessionForKeyAuthentication(
+            JSch jsch,
+            String username,
+            String host,
+            int sshPort) throws JSchException
+    {
+        Session session = jsch.getSession(username, host, sshPort);
         session.setConfig("PreferredAuthentications", "publickey,keyboard-interactive,password");
         java.util.Properties config = new java.util.Properties();
         config.put("StrictHostKeyChecking", "no");
@@ -65,9 +86,9 @@ public class SshCommander {
         return session;
     }
 
-    public ChannelExec sendCommand(Session session, String command) throws JSchException
+    private ChannelExec sendCommand(Session session, String command) throws JSchException
     {
-        session.connect();
+        session.connect(3000);
         ChannelExec channelSsh = (ChannelExec) session.openChannel("exec");
         channelSsh.setCommand(command);
         channelSsh.setPty(false);
