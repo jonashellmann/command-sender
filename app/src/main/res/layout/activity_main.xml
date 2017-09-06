@@ -7,21 +7,10 @@
     android:layout_height="match_parent"
     tools:context="de.hellmann.command_sender.MainActivity">
 
-    <Button
-        android:id="@+id/buttonSsh"
-        android:layout_width="307dp"
-        android:layout_height="43dp"
-        android:text="Button SSH"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.057"
-        app:layout_constraintHorizontal_bias="0.506" />
+
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/outputTextView"
         android:layout_width="383dp"
         android:layout_height="144dp"
         android:text="TextView"
@@ -30,8 +19,13 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteY="367dp"
-        tools:layout_editor_absoluteX="19dp" />
+        app:layout_constraintVertical_bias="1.0" />
+
+    <ListView
+        android:id="@+id/buttonlistView"
+        android:layout_width="381dp"
+        android:layout_height="362dp"
+        tools:layout_editor_absoluteX="2dp"
+        tools:layout_editor_absoluteY="5dp" />
 
 </android.support.constraint.ConstraintLayout>
