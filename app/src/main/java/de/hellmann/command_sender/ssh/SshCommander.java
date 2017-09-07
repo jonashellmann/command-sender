@@ -37,14 +37,16 @@ public class SshCommander {
 
     public List<String> sendCommandWithKeyAuthentication(
             String command,
-            String username,
-            String host,
-            int sshPort,
-            String privateKeyPath,
-            String keyPassphrase) throws JSchException, IOException
+            HostConfiguration hostConfiguration) throws JSchException, IOException
     {
-        JSch jsch = initializeJSchObjectForKeyAuthentication(privateKeyPath, keyPassphrase);
-        Session session = initializeSessionForKeyAuthentication(jsch, username, host, sshPort);
+        JSch jsch = initializeJSchObjectForKeyAuthentication(
+                hostConfiguration.getPrivateKeyPath(),
+                hostConfiguration.getKeyPassphrase());
+        Session session = initializeSessionForKeyAuthentication(
+                jsch,
+                hostConfiguration.getUsername(),
+                hostConfiguration.getHost(),
+                hostConfiguration.getSshPort());
         ChannelExec channelSsh = sendCommand(session, command);
         List<String> lines = readConsoleOutput(channelSsh);
         disconnect(channelSsh, session);

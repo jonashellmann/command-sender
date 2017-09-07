@@ -1,5 +1,6 @@
 package de.hellmann.command_sender;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,36 +14,34 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import de.hellmann.command_sender.ssh.CommandConfiguration;
+import de.hellmann.command_sender.ssh.HostConfiguration;
 import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String COMMAND = "";
-    private static final String USERNAME = "";
-    private static final String HOST = "";
-    private static final int SSH_PORT = 0;
-    private static final String PRIVATE_KEY_PATH = "";
-    private static final String KEY_PASSPHRASE = "";
-
-    private Map<Integer, String> commandToButton = new HashMap<>();
+    private List<HostConfiguration> hostConfigurations;
+    private List<CommandConfiguration> commandConfigurations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        readHostConfiguration();
         createListView();
+        /*File file = new File(getFilesDir(), "test.txt");
+        final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
+        outputTextView.setText(file.toString());*/
     }
 
     private void createListView()
     {
+
         final ListView buttonListView = (ListView) findViewById(R.id.buttonlistView);
 
-        ArrayList<String> list = new ArrayList<>();
-        list.add("Echo 'Hallo'");
-        list.add("Echo folder content");
-
-        mapButtonsWithCommands();
+        readCommandConfiguration();
+        List<String> list = createButtonListFromCommands();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
         buttonListView.setAdapter(adapter);
@@ -51,19 +50,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
-                sendCommand(commandToButton.get(position));
+                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
+
+                sendCommand(
+                        commandConfiguration.getCommand(),
+                        commandConfiguration.getHostConfiguration());
             }
 
         });
+
     }
 
-    private void mapButtonsWithCommands() // TODO: Read from configuration file
+    private List<String> createButtonListFromCommands()
     {
-        commandToButton.put(0, "echo 'Hello World'");
-        commandToButton.put(1, "ls -la");
+        ArrayList<String> list = new ArrayList<>();
+        for(int i = 0; i < commandConfigurations.size(); i++){
+            list.add(commandConfigurations.get(i).getName());
+        }
+        return list;
     }
 
-    private void sendCommand(String command)
+    private void sendCommand(String command, HostConfiguration hostConfiguration)
     {
         final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
 
@@ -71,12 +78,8 @@ public class MainActivity extends AppCompatActivity {
         try{
             List<String> lines =
                     ssh.sendCommandWithKeyAuthentication(
-                            COMMAND,
-                            USERNAME,
-                            HOST,
-                            SSH_PORT,
-                            PRIVATE_KEY_PATH,
-                            KEY_PASSPHRASE);
+                            command,
+                            hostConfiguration);
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : lines)
             {
@@ -88,4 +91,16 @@ public class MainActivity extends AppCompatActivity {
             outputTextView.setText(ex.getMessage());
         }
     }
+
+    private void readHostConfiguration()
+    {
+        // TODO: Read from configuration file
+    }
+
+    private void readCommandConfiguration() // TODO: Read from configuration file
+    {
+        commandConfigurations.add(new CommandConfiguration(0, "echo 'Hello World'", "Print Hello World", null));
+        commandConfigurations.add(new CommandConfiguration(1, "ls -la", "Show directory content", null));
+    }
+
 }
