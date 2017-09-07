@@ -7,8 +7,6 @@
     android:layout_height="match_parent"
     tools:context="de.hellmann.command_sender.MainActivity">
 
-
-
     <TextView
         android:id="@+id/outputTextView"
         android:layout_width="383dp"
