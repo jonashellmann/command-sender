@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void readCommandConfiguration() // TODO: Read from configuration file
     {
-        commandConfigurations.add(new CommandConfiguration(0, "echo 'Hello World'", "Print Hello World", null));
-        commandConfigurations.add(new CommandConfiguration(1, "ls -la", "Show directory content", null));
+        commandConfigurations.add(new CommandConfiguration("echo 'Hello World'", "Print Hello World", null));
+        commandConfigurations.add(new CommandConfiguration("ls -la", "Show directory content", null));
     }
 
 }
