@@ -74,41 +74,56 @@ public class AddCommandActivity extends Activity
             hostConfiguration = null;
         }
 
+        if (checkInput(command, name, hostConfiguration))
+        {
+
+            databaseManager.executeSql(
+                    String.format(
+                            "INSERT INTO command VALUES (%d, '%s', '%s', %s);",
+                            id,
+                            command,
+                            name,
+                            hostConfiguration));
+
+            if (checkCommandSuccessfullyCreated(id))
+            {
+                showMessage("Command successfully created");
+                goToMainActivity();
+                return;
+            }
+
+            showMessage("Error while creating command");
+
+        }
+
+    }
+
+    private boolean checkInput(String command, String name, String hostConfiguration)
+    {
         if (command.isEmpty())
         {
             showMessage("Please enter a command");
-            return ;
+            return false;
         }
 
         if(name.isEmpty())
         {
             showMessage("Please enter a display name");
-            return ;
+            return false;
         }
 
         if(hostConfiguration.isEmpty())
         {
             showMessage("Please choose a host where the command will be executed");
-            return ;
+            return false;
         }
 
-        databaseManager.executeSql(
-                String.format(
-                        "INSERT INTO command VALUES (%d, '%s', '%s', %s);",
-                        id,
-                        command,
-                        name,
-                        hostConfiguration));
+        return true;
+    }
 
-        if (databaseManager.runQuery("SELECT * FROM command WHERE id = " + id).moveToFirst())
-        {
-            showMessage("Command successfully created");
-            goToMainActivity();
-            return;
-        }
-
-        showMessage("Error while creating command");
-
+    private boolean checkCommandSuccessfullyCreated(int commandId)
+    {
+        return databaseManager.runQuery("SELECT * FROM command WHERE id = " + commandId).moveToFirst();
     }
 
     private void showMessage(String message)
