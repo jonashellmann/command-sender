@@ -177,7 +177,7 @@ public class AddHostActivity extends Activity {
             return false;
         }
 
-        if (host.isEmpty() || host.matches("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"))
+        if (host.isEmpty() || host.matches("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}"))
         {
             showMessage("Please enter the IPv4 address of the server");
             return false;

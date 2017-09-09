@@ -155,7 +155,7 @@ public class AddCommandActivity extends Activity
             }
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, spinnerList);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
