@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import de.hellmann.command_sender.MainActivity;
@@ -23,6 +25,8 @@ public class AddHostActivity extends Activity {
     private EditText usernameInput;
     private EditText hostInput;
     private EditText sshPortInput;
+    private RadioButton radioButtonPassword;
+    private RadioButton radioButtonKey;
     private EditText privateKeyPathInput;
     private EditText keyPassphraseInput;
     private EditText passwordInput;
@@ -40,10 +44,19 @@ public class AddHostActivity extends Activity {
         usernameInput = (EditText) findViewById(R.id.editTextUsername);
         hostInput = (EditText) findViewById(R.id.editTextHost);
         sshPortInput = (EditText) findViewById(R.id.editTextSshPort);
+        radioButtonKey = (RadioButton) findViewById(R.id.radioButtonKey);
+        radioButtonPassword = (RadioButton) findViewById(R.id.radioButtonPassword);
         privateKeyPathInput = (EditText) findViewById(R.id.editTextPrivateKeyPath);
         keyPassphraseInput = (EditText) findViewById(R.id.editTextKeyPassphrase);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
         button = (Button) findViewById(R.id.buttonSaveHost);
+
+        registerListeners();
+
+    }
+
+    private void registerListeners()
+    {
 
         button.setOnClickListener(new View.OnClickListener()
         {
@@ -51,9 +64,43 @@ public class AddHostActivity extends Activity {
             @Override
             public void onClick(View v)
             {
-
                 saveHost();
+            }
 
+        });
+
+        final TextView textViewPrivateKeyPath = (TextView) findViewById(R.id.textViewPrivateKeyPath);
+        final TextView textViewKeyPassphrase = (TextView) findViewById(R.id.textViewKeyPassphrase);
+        final TextView textViewPassword = (TextView) findViewById(R.id.textViewPassword);
+
+        radioButtonPassword.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v)
+            {
+                textViewPrivateKeyPath.setVisibility(View.INVISIBLE);
+                privateKeyPathInput.setVisibility(View.INVISIBLE);
+                textViewKeyPassphrase.setVisibility(View.INVISIBLE);
+                keyPassphraseInput.setVisibility(View.INVISIBLE);
+
+                passwordInput.setVisibility(View.VISIBLE);
+                textViewPassword.setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        radioButtonKey.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v)
+            {
+                textViewPrivateKeyPath.setVisibility(View.VISIBLE);
+                privateKeyPathInput.setVisibility(View.VISIBLE);
+                textViewKeyPassphrase.setVisibility(View.VISIBLE);
+                keyPassphraseInput.setVisibility(View.VISIBLE);
+
+                passwordInput.setVisibility(View.INVISIBLE);
+                textViewPassword.setVisibility(View.INVISIBLE);
             }
 
         });
