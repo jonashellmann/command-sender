@@ -19,9 +19,10 @@ import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<HostConfiguration> hostConfigurations;
     private List<CommandConfiguration> commandConfigurations;
     private SQLiteDatabase database;
+    private TextView textView;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,6 +30,10 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        listView = (ListView) findViewById(R.id.buttonlistView);
+        textView = (TextView) findViewById(R.id.outputTextView);
+        textView.setText("");
 
         establishConnectionToDatabase();
         createListView();
@@ -38,14 +43,12 @@ public class MainActivity extends AppCompatActivity {
     private void createListView()
     {
 
-        final ListView buttonListView = (ListView) findViewById(R.id.buttonlistView);
-
         readCommandConfiguration();
         List<String> list = createButtonListFromCommands();
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-        buttonListView.setAdapter(adapter);
-        buttonListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendCommand(String command, HostConfiguration hostConfiguration)
     {
-        final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
 
         SshCommander ssh = new SshCommander();
         try{
@@ -87,10 +89,10 @@ public class MainActivity extends AppCompatActivity {
             {
                 stringBuilder.append(s + "\n");
             }
-            outputTextView.setText(stringBuilder.toString());
+            textView.setText(stringBuilder.toString());
         }
         catch(Exception ex){
-            outputTextView.setText(ex.getMessage());
+            textView.setText(ex.getMessage());
         }
     }
 
@@ -123,6 +125,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         commandCursor.close();
+
+        if(commandConfigurations.isEmpty())
+        {
+            textView.setText("There are no commands configured yet :(");
+        }
 
     }
 
