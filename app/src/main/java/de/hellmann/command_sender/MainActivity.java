@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         establishConnectionToDatabase();
-        readHostConfiguration();
         createListView();
 
     }
@@ -96,34 +94,57 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void readHostConfiguration()
-    {
-        // TODO: Read from configuration file
-    }
-
     private void readCommandConfiguration() // TODO: Read from configuration file
     {
 
         commandConfigurations = new ArrayList<>();
 
-        Cursor cursor = database.rawQuery("SELECT * FROM command", null);
+        Cursor commandCursor = database.rawQuery("SELECT * FROM command", null);
 
-        int commandIndex = cursor.getColumnIndex("command");
-        int nameIndex = cursor.getColumnIndex("name");
-        int hostConfigurationIdIndex = cursor.getColumnIndex("hostconfiguration_id");
+        int commandIndex = commandCursor.getColumnIndex("command");
+        int nameIndex = commandCursor.getColumnIndex("name");
+        int hostConfigurationIdIndex = commandCursor.getColumnIndex("hostconfiguration_id");
 
-        if (cursor.moveToFirst()){
-            while(!cursor.isAfterLast()){
+        if (commandCursor.moveToFirst())
+        {
+
+            while(!commandCursor.isAfterLast())
+            {
+
                 commandConfigurations.add(
                         new CommandConfiguration(
-                                cursor.getString(commandIndex),
-                                cursor.getString(nameIndex),
-                                null)); // TODO Read from other table
-                cursor.moveToNext();
+                                commandCursor.getString(commandIndex),
+                                commandCursor.getString(nameIndex),
+                                findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
+
+                commandCursor.moveToNext();
+
             }
         }
-        cursor.close();
 
+        commandCursor.close();
+
+    }
+
+    private HostConfiguration findHostById(int hostId)
+    {
+        HostConfiguration hostConfiguration = null;
+        Cursor hostCursor =
+                database.rawQuery("SELECT * FROM host WHERE id=" + hostId, null);
+
+        if(hostCursor.moveToFirst())
+        {
+            hostConfiguration =
+                    new HostConfiguration(
+                            hostCursor.getString(hostCursor.getColumnIndex("username")),
+                            hostCursor.getString(hostCursor.getColumnIndex("host")),
+                            hostCursor.getInt(hostCursor.getColumnIndex("sshPort")),
+                            hostCursor.getString(hostCursor.getColumnIndex("privateKeyPath")),
+                            hostCursor.getString(hostCursor.getColumnIndex("keyPassphrase")),
+                            hostCursor.getString(hostCursor.getColumnIndex("password")));
+        }
+
+        return hostConfiguration;
     }
 
     private void establishConnectionToDatabase()

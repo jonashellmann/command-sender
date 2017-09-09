@@ -19,25 +19,15 @@ public class HostConfiguration
             String host,
             int sshPort,
             String privateKeyPath,
-            String keyPassphrase)
+            String keyPassphrase,
+            String password)
     {
         this.username = username;
         this.host = host;
         this.sshPort = sshPort;
         this.privateKeyPath = privateKeyPath;
         this.keyPassphrase = keyPassphrase;
-    }
-
-    public HostConfiguration(
-            String username,
-            String password,
-            String host,
-            int sshPort)
-    {
-        this.username = username;
         this.password = password;
-        this.host = host;
-        this.sshPort = sshPort;
     }
 
     public String getUsername()
