@@ -19,6 +19,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".configuration.ConfigurationActivity"></activity>
+        <activity android:name=".configuration.command.AddCommandActivity"></activity>
+        <activity android:name=".configuration.host.AddHostActivity"></activity>
+        <activity android:name=".configuration.host.ChangeHostActivity"></activity>
+        <activity android:name=".configuration.command.ChangeCommandActivity"></activity>
     </application>
 
 </manifest>
