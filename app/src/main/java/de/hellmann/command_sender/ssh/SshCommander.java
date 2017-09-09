@@ -20,22 +20,38 @@ import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 
 public class SshCommander {
 
-    public List<String> sendCommandWithPasswordAuthentification(
+    public List<String> sendCommand(String command, HostConfiguration hostConfiguration)
+            throws JSchException, IOException
+    {
+        if (hostConfiguration.usesKeyAuthentication())
+        {
+            return sendCommandWithKeyAuthentication(command, hostConfiguration);
+        }
+        else
+        {
+            return sendCommandWithPasswordAuthentification(command, hostConfiguration);
+        }
+    }
+
+    private List<String> sendCommandWithPasswordAuthentification(
             String command,
-            String username,
-            String password,
-            String host,
-            int sshPort) throws JSchException, IOException
+            HostConfiguration hostConfiguration) throws JSchException, IOException
     {
         JSch jsch = new JSch();
-        Session session = initializeSessionForPasswordAuthentication(jsch, username, password, host, sshPort);
+        Session session =
+                initializeSessionForPasswordAuthentication(
+                        jsch,
+                        hostConfiguration.getUsername(),
+                        hostConfiguration.getPassword(),
+                        hostConfiguration.getHost(),
+                        hostConfiguration.getSshPort());
         ChannelExec channelSsh = sendCommand(session, command);
         List<String> lines = readConsoleOutput(channelSsh);
         disconnect(channelSsh, session);
         return lines;
     }
 
-    public List<String> sendCommandWithKeyAuthentication(
+    private List<String> sendCommandWithKeyAuthentication(
             String command,
             HostConfiguration hostConfiguration) throws JSchException, IOException
     {

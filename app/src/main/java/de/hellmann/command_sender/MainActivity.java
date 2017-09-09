@@ -93,9 +93,7 @@ public class MainActivity extends AppCompatActivity {
         SshCommander ssh = new SshCommander();
         try{
             List<String> lines =
-                    ssh.sendCommandWithKeyAuthentication(
-                            command,
-                            hostConfiguration);
+                    ssh.sendCommand(command, hostConfiguration);
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : lines)
             {
