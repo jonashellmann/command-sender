@@ -113,9 +113,7 @@ public class AddCommandActivity extends Activity
 
     private void showMessage(String message)
     {
-
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
-        
     }
 
     private void populateSpinner()

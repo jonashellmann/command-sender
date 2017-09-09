@@ -129,7 +129,8 @@ public class MainActivity extends AppCompatActivity {
                         new CommandConfiguration(
                                 commandCursor.getString(commandIndex),
                                 commandCursor.getString(nameIndex),
-                                findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
+                                //findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
+                                null));
 
                 commandCursor.moveToNext();
 
