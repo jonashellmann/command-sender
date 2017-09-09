@@ -126,37 +126,98 @@ public class AddHostActivity extends Activity {
         String passphrase = keyPassphraseInput.getText().toString();
         String password = passwordInput.getText().toString();
 
+        if (inputValid(
+                username,
+                host,
+                sshPort,
+                privateKeyPath,
+                passphrase,
+                password,
+                radioButtonPassword.isChecked(),
+                radioButtonKey.isChecked()))
+        {
+
+            databaseManager.executeSql(
+                    String.format(
+                            "INSERT INTO host VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s');",
+                            id,
+                            username,
+                            host,
+                            sshPort,
+                            privateKeyPath,
+                            passphrase,
+                            password));
+
+            if(hostSuccessfullyCreated(id))
+            {
+                showMessage("Host successfully created");
+                goToMainActivity();
+                return ;
+            }
+
+            showMessage("Error while creating host");
+
+        }
+
+    }
+
+    private boolean inputValid(
+            String username,
+            String host,
+            int sshPort,
+            String privateKeyPath,
+            String keyPassphrase,
+            String password,
+            boolean isPassword,
+            boolean isKey)
+    {
         if (username.isEmpty())
         {
-            showMessage("Enter a user name");
-            return ;
+            showMessage("Please enter a user name");
+            return false;
         }
 
         if (host.isEmpty() || host.matches("((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"))
         {
-            showMessage("Enter the IPv4 address of the server");
-            return ;
+            showMessage("Please enter the IPv4 address of the server");
+            return false;
         }
 
         if (sshPort < 0 || sshPort > 65535)
         {
-            showMessage("SSH port must be between 0 and 65535");
-            return ;
+            showMessage("Please enter a port between 0 and 65535");
+            return false;
         }
 
-        databaseManager.executeSql(
-                String.format(
-                        "INSERT INTO host VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s');",
-                        id,
-                        username,
-                        host,
-                        sshPort,
-                        privateKeyPath,
-                        passphrase,
-                        password));
+        if (isKey)
+        {
 
-        goToMainActivity();
+            if (privateKeyPath.isEmpty())
+            {
+                showMessage("Please enter the path pointing to the private key");
+                return false;
+            }
 
+            if(keyPassphrase.isEmpty())
+            {
+                showMessage("Please enter the key passphrase");
+                return false;
+            }
+
+        }
+
+        if (isPassword && password.isEmpty())
+        {
+            showMessage("Please enter a password");
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean hostSuccessfullyCreated(int hostId)
+    {
+        return databaseManager.runQuery("SELECT * FROM host WHERE id = " + hostId).moveToFirst();
     }
 
     private void showMessage(String message)

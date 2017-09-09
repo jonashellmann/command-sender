@@ -74,7 +74,7 @@ public class AddCommandActivity extends Activity
             hostConfiguration = null;
         }
 
-        if (checkInput(command, name, hostConfiguration))
+        if (inputValid(command, name, hostConfiguration))
         {
 
             databaseManager.executeSql(
@@ -85,7 +85,7 @@ public class AddCommandActivity extends Activity
                             name,
                             hostConfiguration));
 
-            if (checkCommandSuccessfullyCreated(id))
+            if (commandSuccessfullyCreated(id))
             {
                 showMessage("Command successfully created");
                 goToMainActivity();
@@ -98,7 +98,7 @@ public class AddCommandActivity extends Activity
 
     }
 
-    private boolean checkInput(String command, String name, String hostConfiguration)
+    private boolean inputValid(String command, String name, String hostConfiguration)
     {
         if (command.isEmpty())
         {
@@ -121,7 +121,7 @@ public class AddCommandActivity extends Activity
         return true;
     }
 
-    private boolean checkCommandSuccessfullyCreated(int commandId)
+    private boolean commandSuccessfullyCreated(int commandId)
     {
         return databaseManager.runQuery("SELECT * FROM command WHERE id = " + commandId).moveToFirst();
     }
