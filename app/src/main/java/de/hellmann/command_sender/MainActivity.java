@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void readCommandConfiguration() // TODO: Read from configuration file
+    private void readCommandConfiguration()
     {
 
         commandConfigurations = new ArrayList<>();
@@ -129,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                         new CommandConfiguration(
                                 commandCursor.getString(commandIndex),
                                 commandCursor.getString(nameIndex),
-                                //findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
-                                null));
+                                findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
 
                 commandCursor.moveToNext();
 

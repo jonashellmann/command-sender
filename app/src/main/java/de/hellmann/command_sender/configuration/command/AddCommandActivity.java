@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,18 +60,62 @@ public class AddCommandActivity extends Activity
 
     public void saveCommand()
     {
+
+        int id = databaseManager.findNextId("command", "id");
+        String command = commandInput.getText().toString();
+        String name = displayNameInput.getText().toString();
+        String hostConfiguration;
+        try
+        {
+            hostConfiguration = list.get(spinner.getSelectedItemPosition()).toString();
+        }
+        catch (Exception exception)
+        {
+            hostConfiguration = null;
+        }
+
+        if (command.isEmpty())
+        {
+            showMessage("Please enter a command");
+            return ;
+        }
+
+        if(name.isEmpty())
+        {
+            showMessage("Please enter a display name");
+            return ;
+        }
+
+        if(hostConfiguration.isEmpty())
+        {
+            showMessage("Please choose a host where the command will be executed");
+            return ;
+        }
+
         databaseManager.executeSql(
                 String.format(
                         "INSERT INTO command VALUES (%d, '%s', '%s', %s);",
-                        databaseManager.findNextId("command", "id"),
-                        commandInput.getText().toString(),
-                        displayNameInput.getText().toString(),
-                        list.get(spinner.getSelectedItemPosition()).toString()));
+                        id,
+                        command,
+                        name,
+                        hostConfiguration));
 
-        //TODO: Show Toast with success or error
+        if (databaseManager.runQuery("SELECT * FROM command WHERE id = " + id).moveToFirst())
+        {
+            showMessage("Command successfully created");
+            goToMainActivity();
+            return;
+        }
 
-        goToMainActivity();
+        showMessage("Error while creating command");
 
+    }
+
+    private void showMessage(String message)
+    {
+
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        
     }
 
     private void populateSpinner()
