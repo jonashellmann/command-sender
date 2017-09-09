@@ -2,7 +2,6 @@ package de.hellmann.command_sender;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        establishConnectionToDatabase();
+        createOrOpenDatabase();
         createListView();
 
     }
@@ -166,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         return hostConfiguration;
     }
 
-    private void establishConnectionToDatabase()
+    private void createOrOpenDatabase()
     {
 
         databaseManager = new DatabaseManager(getApplicationContext());
