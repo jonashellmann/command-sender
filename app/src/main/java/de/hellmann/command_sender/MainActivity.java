@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.hellmann.command_sender.configuration.ConfigurationActivity;
+import de.hellmann.command_sender.database.DatabaseManager;
 import de.hellmann.command_sender.ssh.domain.CommandConfiguration;
 import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 import de.hellmann.command_sender.ssh.SshCommander;
@@ -23,7 +24,7 @@ import de.hellmann.command_sender.ssh.SshCommander;
 public class MainActivity extends AppCompatActivity {
 
     private List<CommandConfiguration> commandConfigurations;
-    private SQLiteDatabase database;
+    private DatabaseManager databaseManager;
     private TextView textView;
     private ListView listView;
     private Button button;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         commandConfigurations = new ArrayList<>();
 
-        Cursor commandCursor = database.rawQuery("SELECT * FROM command", null);
+        Cursor commandCursor = databaseManager.runQuery("SELECT * FROM command");
 
         int commandIndex = commandCursor.getColumnIndex("command");
         int nameIndex = commandCursor.getColumnIndex("name");
@@ -148,8 +149,7 @@ public class MainActivity extends AppCompatActivity {
     private HostConfiguration findHostById(int hostId)
     {
         HostConfiguration hostConfiguration = null;
-        Cursor hostCursor =
-                database.rawQuery("SELECT * FROM host WHERE id=" + hostId, null);
+        Cursor hostCursor = databaseManager.runQuery("SELECT * FROM host WHERE id=" + hostId);
 
         if(hostCursor.moveToFirst())
         {
@@ -169,15 +169,10 @@ public class MainActivity extends AppCompatActivity {
     private void establishConnectionToDatabase()
     {
 
-        database = openOrCreateDatabase("SSH", MODE_PRIVATE, null);
+        databaseManager = new DatabaseManager(getApplicationContext());
 
-        database.execSQL("CREATE TABLE IF NOT EXISTS command (id INT(4), command VARCHAR, name VARCHAR, hostconfiguration_id INT(4))");
-        database.execSQL("CREATE TABLE IF NOT EXISTS host (id INT(4), username VARCHAR, host VARCHAR, sshPort INT(5), privateKeyPath VARCHAR, keyPassphrase VARCHAR, password VARCHAR)");
-
-        database.execSQL("DELETE FROM command");
-        database.execSQL("DELETE FROM host");
-
-        database.execSQL("INSERT INTO command VALUES (1, 'ls -la,', 'Test', 0)");
+        databaseManager.executeSql("CREATE TABLE IF NOT EXISTS host (id INT(4) NOT NULL PRIMARY KEY, username VARCHAR NOT NULL, host VARCHAR NOT NULL, sshPort INT(5) NOT NULL, privateKeyPath VARCHAR, keyPassphrase VARCHAR, password VARCHAR)");
+        databaseManager.executeSql("CREATE TABLE IF NOT EXISTS command (id INT(4) NOT NULL PRIMARY KEY, command VARCHAR NOT NULL, name VARCHAR NOT NULL, hostconfiguration INT(4) NOT NULL, FOREIGN KEY(hostconfiguration) REFERENCES host(id))");
 
     }
 

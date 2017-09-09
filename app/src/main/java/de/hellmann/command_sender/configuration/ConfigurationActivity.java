@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.hellmann.command_sender.R;
+import de.hellmann.command_sender.configuration.command.AddCommandActivity;
 import de.hellmann.command_sender.configuration.domain.ConfigMenueEntry;
+import de.hellmann.command_sender.configuration.host.AddHostActivity;
 
 /**
  * Created by hellm on 09.09.2017.
@@ -39,10 +41,9 @@ public class ConfigurationActivity extends Activity {
 
     private void fillListView()
     {
-
         entries = Arrays.asList(
-                new ConfigMenueEntry("Add new host", null),
-                new ConfigMenueEntry("Add new command", null));
+                new ConfigMenueEntry("Add new host", AddHostActivity.class),
+                new ConfigMenueEntry("Add new command", AddCommandActivity.class));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getTextsOfEntries());
         listView.setAdapter(adapter);
