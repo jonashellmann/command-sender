@@ -3,6 +3,7 @@ package de.hellmann.command_sender.database;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Created by hellm on 09.09.2017.
@@ -22,11 +23,13 @@ public class DatabaseManager
 
     public void executeSql(String sql)
     {
+        Log.e("", sql);
         database.execSQL(sql);
     }
 
     public Cursor runQuery(String query)
     {
+        Log.e("", query);
         return database.rawQuery(query, null);
     }
 
@@ -36,7 +39,7 @@ public class DatabaseManager
 
         if (cursor.moveToFirst())
         {
-            return cursor.getInt(cursor.getColumnIndex("id"));
+            return cursor.getInt(cursor.getColumnIndex("id")) + 1;
         }
 
         return 0;
