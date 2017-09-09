@@ -6,13 +6,13 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+
+import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 
 /**
  * Created by hellm on 27.08.2017.

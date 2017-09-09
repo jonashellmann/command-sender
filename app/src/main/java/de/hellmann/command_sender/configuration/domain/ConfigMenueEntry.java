@@ -1,4 +1,4 @@
-package de.hellmann.command_sender.configuration;
+package de.hellmann.command_sender.configuration.domain;
 
 import android.app.Activity;
 import android.app.Application;

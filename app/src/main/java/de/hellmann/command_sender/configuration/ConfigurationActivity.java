@@ -1,4 +1,4 @@
-package de.hellmann.command_sender;
+package de.hellmann.command_sender.configuration;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,15 +7,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import de.hellmann.command_sender.configuration.ConfigMenueEntry;
-import de.hellmann.command_sender.ssh.CommandConfiguration;
+import de.hellmann.command_sender.R;
+import de.hellmann.command_sender.configuration.domain.ConfigMenueEntry;
 
 /**
  * Created by hellm on 09.09.2017.

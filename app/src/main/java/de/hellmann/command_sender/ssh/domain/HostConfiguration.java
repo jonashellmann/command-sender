@@ -1,4 +1,4 @@
-package de.hellmann.command_sender.ssh;
+package de.hellmann.command_sender.ssh.domain;
 
 /**
  * Created by hellm on 07.09.2017.

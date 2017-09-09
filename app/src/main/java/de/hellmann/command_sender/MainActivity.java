@@ -15,8 +15,9 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.hellmann.command_sender.ssh.CommandConfiguration;
-import de.hellmann.command_sender.ssh.HostConfiguration;
+import de.hellmann.command_sender.configuration.ConfigurationActivity;
+import de.hellmann.command_sender.ssh.domain.CommandConfiguration;
+import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
