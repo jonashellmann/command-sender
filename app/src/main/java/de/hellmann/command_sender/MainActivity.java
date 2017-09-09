@@ -1,5 +1,6 @@
 package de.hellmann.command_sender;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -23,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private SQLiteDatabase database;
     private TextView textView;
     private ListView listView;
+    private Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.buttonlistView);
         textView = (TextView) findViewById(R.id.outputTextView);
-        textView.setText("");
+        button = (Button) findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, ConfigurationActivity.class);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
 
         establishConnectionToDatabase();
         createListView();
@@ -161,6 +172,11 @@ public class MainActivity extends AppCompatActivity {
 
         database.execSQL("CREATE TABLE IF NOT EXISTS command (id INT(4), command VARCHAR, name VARCHAR, hostconfiguration_id INT(4))");
         database.execSQL("CREATE TABLE IF NOT EXISTS host (id INT(4), username VARCHAR, host VARCHAR, sshPort INT(5), privateKeyPath VARCHAR, keyPassphrase VARCHAR, password VARCHAR)");
+
+        database.execSQL("DELETE FROM command");
+        database.execSQL("DELETE FROM host");
+
+        database.execSQL("INSERT INTO command VALUES (1, 'ls -la,', 'Test', 0)");
 
     }
 
