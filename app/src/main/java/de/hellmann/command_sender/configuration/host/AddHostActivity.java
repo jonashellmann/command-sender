@@ -22,6 +22,8 @@ import de.hellmann.command_sender.database.DatabaseManager;
  * Created by hellm on 09.09.2017.
  */
 
+//TODO Spinner to choose key file
+
 public class AddHostActivity extends Activity {
 
     private DatabaseManager databaseManager;
