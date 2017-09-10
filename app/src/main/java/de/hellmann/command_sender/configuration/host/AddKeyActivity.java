@@ -117,9 +117,8 @@ public class AddKeyActivity extends Activity
 
     private File getPublicStorageDirectory()
     {
-        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "command-sender");
         file.mkdirs();
-        Log.e("", file.toString());
         return file;
     }
 

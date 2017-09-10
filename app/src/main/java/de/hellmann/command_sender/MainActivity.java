@@ -124,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendCommand(String command, HostConfiguration hostConfiguration)
     {
-
         SshCommander ssh = new SshCommander();
         try{
             List<String> lines =
