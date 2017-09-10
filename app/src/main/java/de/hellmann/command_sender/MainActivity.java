@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
         int commandIndex = commandCursor.getColumnIndex("command");
         int nameIndex = commandCursor.getColumnIndex("name");
-        int hostConfigurationIdIndex = commandCursor.getColumnIndex("hostconfiguration_id");
+        int hostConfigurationIdIndex = commandCursor.getColumnIndex("hostconfiguration");
 
         if (commandCursor.moveToFirst())
         {
@@ -127,8 +127,7 @@ public class MainActivity extends AppCompatActivity {
                         new CommandConfiguration(
                                 commandCursor.getString(commandIndex),
                                 commandCursor.getString(nameIndex),
-                                //findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
-                                null));
+                                findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
 
                 commandCursor.moveToNext();
 

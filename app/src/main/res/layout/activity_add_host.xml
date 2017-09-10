@@ -4,17 +4,10 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView5"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Add new host"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-    <TextView
         android:id="@+id/textView6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Username" />
+        android:text="USERNAME" />
 
     <EditText
         android:id="@+id/editTextUsername"
@@ -27,7 +20,7 @@
         android:id="@+id/textView7"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Host" />
+        android:text="HOST" />
 
     <EditText
         android:id="@+id/editTextHost"
@@ -40,7 +33,7 @@
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="SSH port" />
+        android:text="SSH PORT" />
 
     <EditText
         android:id="@+id/editTextSshPort"
@@ -60,20 +53,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.86"
-            android:text="Password authentication" />
+            android:text="PASSWORD AUTHENTICATION" />
 
         <RadioButton
             android:id="@+id/radioButtonKey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Key authentication" />
+            android:text="KEY AUTHENTICATION" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/textViewPrivateKeyPath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Private key path"
+        android:text="PRIVATE KEY PATH"
         android:visibility="invisible" />
 
     <EditText
@@ -88,7 +81,7 @@
         android:id="@+id/textViewKeyPassphrase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Key passphrase"
+        android:text="KEY PASSPHRASE"
         android:visibility="invisible" />
 
     <EditText
@@ -103,7 +96,7 @@
         android:id="@+id/textViewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Password"
+        android:text="PASSWORD"
         android:visibility="invisible" />
 
     <EditText
@@ -111,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPersonName"
+        android:inputType="textPassword"
         android:visibility="invisible" />
 
     <Button

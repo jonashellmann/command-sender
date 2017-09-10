@@ -3,6 +3,7 @@ package de.hellmann.command_sender.configuration.host;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -122,11 +123,12 @@ public class AddHostActivity extends Activity {
         {
             sshPort = -1;
         }
-        String privateKeyPath = privateKeyPathInput.getText().toString();
+        String privateKeyPath = getFilesDir().toString() + "/" + privateKeyPathInput.getText().toString();
+        Log.e("KEY PATH", privateKeyPath);
         String passphrase = keyPassphraseInput.getText().toString();
         String password = passwordInput.getText().toString();
 
-        if (inputValid(
+        if (checkInput(
                 username,
                 host,
                 sshPort,
@@ -161,7 +163,7 @@ public class AddHostActivity extends Activity {
 
     }
 
-    private boolean inputValid(
+    private boolean checkInput(
             String username,
             String host,
             int sshPort,
@@ -177,11 +179,7 @@ public class AddHostActivity extends Activity {
             return false;
         }
 
-        if (host.isEmpty() || host.matches("[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}"))
-        {
-            showMessage("Please enter the IPv4 address of the server");
-            return false;
-        }
+        //TODO: Check IPv4
 
         if (sshPort < 0 || sshPort > 65535)
         {

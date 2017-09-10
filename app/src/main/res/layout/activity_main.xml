@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
 
     <Button
@@ -14,17 +15,25 @@
         android:id="@+id/textView12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Press one of the buttons below to execute the command" />
+        android:text="PRESS BUTTON TO RUN COMMAND" />
 
     <ListView
         android:id="@+id/buttonlistView"
         android:layout_width="match_parent"
-        android:layout_height="313dp" />
+        android:layout_height="257dp"
+        android:layout_weight="0.71" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CONSOLE OUTPUT" />
 
     <TextView
         android:id="@+id/outputTextView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorTextViewBackground"/>
+        android:layout_height="96dp"
+        android:layout_weight="0.32"
+        android:background="@color/colorTextViewBackground" />
 
 </LinearLayout>

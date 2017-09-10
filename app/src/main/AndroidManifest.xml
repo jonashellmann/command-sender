@@ -23,6 +23,7 @@
         <activity android:name=".configuration.host.AddHostActivity"></activity>
         <activity android:name=".configuration.host.ChangeHostActivity"></activity>
         <activity android:name=".configuration.command.ChangeCommandActivity"></activity>
+        <activity android:name=".configuration.host.AddKeyActivity"></activity>
     </application>
 
 </manifest>
