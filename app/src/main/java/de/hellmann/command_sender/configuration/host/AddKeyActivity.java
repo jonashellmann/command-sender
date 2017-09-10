@@ -59,29 +59,40 @@ public class AddKeyActivity extends Activity
         if(inputValid(filename, privateKey))
         {
 
-            FileOutputStream fileOutputStream;
-
-            try
+            if(saveKey(filename, privateKey))
             {
-                fileOutputStream = openFileOutput(filename, MODE_PRIVATE);
-                fileOutputStream.write(privateKey.getBytes(StandardCharsets.UTF_8));
-                fileOutputStream.close();
-
-                if (keyFileCreated(filename))
-                {
-                    showMessage("Key successfully saved" + getFilesDir().listFiles().length);
-                    return ;
-                }
-
-                throw new Exception();
+                showMessage("Key successfully saved");
             }
-            catch (Exception exception)
+            else
             {
                 showMessage("Error while saving key");
             }
 
         }
 
+    }
+
+    private boolean saveKey(String filename, String privateKey)
+    {
+        FileOutputStream fileOutputStream;
+
+        try
+        {
+            fileOutputStream = openFileOutput(filename, MODE_PRIVATE);
+            fileOutputStream.write(privateKey.getBytes(StandardCharsets.UTF_8));
+            fileOutputStream.close();
+
+            if (keyFileCreated(filename))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch (IOException exception)
+        {
+            return false;
+        }
     }
 
     private boolean inputValid(String filename, String privateKey)
