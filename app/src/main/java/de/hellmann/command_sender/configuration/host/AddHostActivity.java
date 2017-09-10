@@ -2,17 +2,22 @@ package de.hellmann.command_sender.configuration.host;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import de.hellmann.command_sender.MainActivity;
 import de.hellmann.command_sender.R;
@@ -33,7 +38,7 @@ public class AddHostActivity extends Activity {
     private EditText sshPortInput;
     private RadioButton radioButtonPassword;
     private RadioButton radioButtonKey;
-    private EditText privateKeyPathInput;
+    private Spinner privateKeyPathInput;
     private EditText keyPassphraseInput;
     private EditText passwordInput;
     private Button button;
@@ -52,12 +57,14 @@ public class AddHostActivity extends Activity {
         sshPortInput = (EditText) findViewById(R.id.editTextSshPort);
         radioButtonKey = (RadioButton) findViewById(R.id.radioButtonKey);
         radioButtonPassword = (RadioButton) findViewById(R.id.radioButtonPassword);
-        privateKeyPathInput = (EditText) findViewById(R.id.editTextPrivateKeyPath);
+        privateKeyPathInput = (Spinner) findViewById(R.id.spinnerPrivateKeyPath);
         keyPassphraseInput = (EditText) findViewById(R.id.editTextKeyPassphrase);
         passwordInput = (EditText) findViewById(R.id.editTextPassword);
         button = (Button) findViewById(R.id.buttonSaveHost);
 
         registerListeners();
+
+        populateSpinner();
 
     }
 
@@ -128,11 +135,22 @@ public class AddHostActivity extends Activity {
         {
             sshPort = -1;
         }
-        File privateKeyDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "command-sender");
-        File privateKeyFile = new File(privateKeyDirectory, privateKeyPathInput.getText().toString());
-        String privateKeyPath = privateKeyFile.toString();
+        String privateKeyPath = "";
         String passphrase = keyPassphraseInput.getText().toString();
-        String password = passwordInput.getText().toString();
+        String password = "";
+
+        if(radioButtonKey.isChecked())
+        {
+            File privateKeyDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "command-sender");
+            File privateKeyFile = new File(privateKeyDirectory, privateKeyPathInput.getSelectedItem().toString());
+            Log.i("Key", privateKeyFile.toString());
+            privateKeyPath = privateKeyFile.toString();
+            passphrase = keyPassphraseInput.getText().toString();
+        }
+        else
+        {
+            password = passwordInput.getText().toString();
+        }
 
         if (checkInput(
                 username,
@@ -235,6 +253,23 @@ public class AddHostActivity extends Activity {
         Intent myIntent = new Intent(AddHostActivity.this, MainActivity.class);
         AddHostActivity.this.startActivity(myIntent);
 
+    }
+
+    private void populateSpinner()
+    {
+        List<String> spinnerList = new ArrayList<>();
+
+        File keyDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "command-sender");
+        for (File file : keyDirectory.listFiles())
+        {
+            spinnerList.add(file.getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, spinnerList);
+
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        privateKeyPathInput.setAdapter(adapter);
     }
 
 }

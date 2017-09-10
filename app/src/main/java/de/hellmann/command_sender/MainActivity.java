@@ -52,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.outputTextView);
         button = (Button) findViewById(R.id.button);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 Intent myIntent = new Intent(MainActivity.this, ConfigurationActivity.class);
                 MainActivity.this.startActivity(myIntent);
             }

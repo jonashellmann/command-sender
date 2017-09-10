@@ -69,13 +69,11 @@
         android:text="PRIVATE KEY PATH"
         android:visibility="invisible" />
 
-    <EditText
-        android:id="@+id/editTextPrivateKeyPath"
+    <Spinner
+        android:id="@+id/spinnerPrivateKeyPath"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:visibility="invisible" />
+        android:visibility="invisible"/>
 
     <TextView
         android:id="@+id/textViewKeyPassphrase"
