@@ -1,7 +1,12 @@
 package de.hellmann.command_sender;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +27,8 @@ import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 import de.hellmann.command_sender.ssh.SshCommander;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0;
 
     private List<CommandConfiguration> commandConfigurations;
     private DatabaseManager databaseManager;
@@ -47,9 +55,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getPermissionToWriteToExternalStorage();
+
         createOrOpenDatabase();
         createListView();
 
+    }
+
+    private void getPermissionToWriteToExternalStorage()
+    {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)
+    {
+        switch(requestCode)
+        {
+            case MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE:
+            {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    Toast.makeText(getApplicationContext(), "Permission granted to write on external storage", Toast.LENGTH_LONG).show();
+
+                }
+            }
+        }
     }
 
     private void createListView()
