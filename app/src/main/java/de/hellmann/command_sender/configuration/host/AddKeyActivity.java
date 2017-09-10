@@ -2,16 +2,21 @@ package de.hellmann.command_sender.configuration.host;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 import de.hellmann.command_sender.MainActivity;
@@ -63,10 +68,6 @@ public class AddKeyActivity extends Activity
             {
                 showMessage("Key successfully saved");
             }
-            else
-            {
-                showMessage("Error while saving key");
-            }
 
         }
 
@@ -74,25 +75,63 @@ public class AddKeyActivity extends Activity
 
     private boolean saveKey(String filename, String privateKey)
     {
-        FileOutputStream fileOutputStream;
+
+        if (!isExternalStorageWritable())
+        {
+            showMessage("Error while saving key: can't write to external storage");
+            return false;
+        }
+
+        File file = new File(getPublicStorageDirectory(), filename);
 
         try
         {
-            fileOutputStream = openFileOutput(filename, MODE_PRIVATE);
-            fileOutputStream.write(privateKey.getBytes(StandardCharsets.UTF_8));
-            fileOutputStream.close();
+            OutputStream os = new FileOutputStream(file);
+            os.write(privateKey.getBytes(StandardCharsets.UTF_8));
+            os.close();
 
-            if (keyFileCreated(filename))
-            {
-                return true;
-            }
+            MediaScannerConnection.scanFile(
+                    this,
+                    new String[]{file.toString()},
+                    null,
+                    new MediaScannerConnection.OnScanCompletedListener()
+                    {
+                        @Override
+                        public void onScanCompleted(String path, Uri uri)
+                        {
+                            Log.i("ExternalStorage", "Scanned " + path + ":");
+                            Log.i("ExternalStorage", "-> uri=" + uri);
+                        }
+                    }
+            );
 
-            return false;
+            return true;
         }
-        catch (IOException exception)
+        catch (IOException e)
         {
+            showMessage("Error while saving key: " + e.getMessage());
             return false;
         }
+
+    }
+
+    private File getPublicStorageDirectory()
+    {
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+        file.mkdirs();
+        Log.e("", file.toString());
+        return file;
+    }
+
+    private boolean isExternalStorageWritable()
+    {
+        String state = Environment.getExternalStorageState();
+        if (Environment.MEDIA_MOUNTED.equals(state))
+        {
+            return true;
+        }
+        return false;
+
     }
 
     private boolean inputValid(String filename, String privateKey)
