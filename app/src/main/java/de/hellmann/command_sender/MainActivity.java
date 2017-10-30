@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.buttonlistView);
         textView = (TextView) findViewById(R.id.outputTextView);
         button = (Button) findViewById(R.id.button);
+
+        textView.setMovementMethod(new ScrollingMovementMethod());
 
         button.setOnClickListener(new View.OnClickListener()
         {
