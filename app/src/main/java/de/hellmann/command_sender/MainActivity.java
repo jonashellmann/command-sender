@@ -29,8 +29,6 @@ import de.hellmann.command_sender.ssh.domain.CommandConfiguration;
 import de.hellmann.command_sender.ssh.domain.HostConfiguration;
 import de.hellmann.command_sender.ssh.SshCommander;
 
-// TODO Scrollable output view
-
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_WRITE_EXTERNAL_STORAGE = 0;
