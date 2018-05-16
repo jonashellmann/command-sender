@@ -10,7 +10,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.text.method.ScrollingMovementMethod;
+import android.text.style.RelativeSizeSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -104,9 +106,8 @@ public class MainActivity extends AppCompatActivity {
     {
 
         readCommandConfiguration();
-        List<String> list = createButtonListFromCommands();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
+        ArrayAdapter<SpannableString> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, createButtonListFromCommands());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         ArrayAdapter<String> adapter2 =
-                new ArrayAdapter<String>(
+                new ArrayAdapter<String >(
                         this,
                         android.R.layout.simple_list_item_1,
                         createDeletionListForDisplay());
@@ -141,11 +142,19 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private List<String> createButtonListFromCommands()
+    private List<SpannableString> createButtonListFromCommands()
     {
-        ArrayList<String> list = new ArrayList<>();
+        ArrayList<SpannableString> list = new ArrayList<>();
         for(int i = 0; i < commandConfigurations.size(); i++){
-            list.add(commandConfigurations.get(i).getName());
+            String commandname = commandConfigurations.get(i).getName();
+            String hostname = commandConfigurations.get(i).getHostConfiguration().getHost();
+            String username = commandConfigurations.get(i).getHostConfiguration().getUsername();
+
+            String string = commandname + " (" + username + "@" + hostname + ")";
+            SpannableString spannableString = new SpannableString(string);
+            spannableString.setSpan(new RelativeSizeSpan(0.5f), commandname.length(), string.length(), 0);
+
+            list.add(spannableString);
         }
         return list;
     }
