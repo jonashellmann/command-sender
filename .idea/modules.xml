@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Command-Sender.iml" filepath="$PROJECT_DIR$/Command-Sender.iml" />
+      <module fileurl="file://Z:\Programmierung\command-sender\Command-Sender.iml" filepath="Z:\Programmierung\command-sender\Command-Sender.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://Z:\Programmierung\command-sender\app\app.iml" filepath="Z:\Programmierung\command-sender\app\app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/command-sender.iml" filepath="$PROJECT_DIR$/command-sender.iml" />
     </modules>
   </component>
 </project>
