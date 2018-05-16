@@ -18,11 +18,24 @@
         android:layout_height="wrap_content"
         android:text="PRESS BUTTON TO RUN COMMAND" />
 
-    <ListView
-        android:id="@+id/buttonlistView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_weight="0.71" />
+        android:layout_height="350dp"
+        android:orientation="horizontal">
+
+        <ListView
+            android:id="@+id/buttonlistView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2" />
+
+        <ListView
+            android:id="@+id/buttonlistDeleteView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8" />
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textView"
@@ -33,11 +46,11 @@
     <TextView
         android:id="@+id/outputTextView"
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="match_parent"
         android:layout_weight="0.32"
         android:background="@color/colorTextViewBackground"
         android:nestedScrollingEnabled="false"
         android:scrollbars="vertical"
-        android:maxLines = "7"/>
+        android:maxLines = "10" />
 
 </LinearLayout>

@@ -33,6 +33,11 @@ public class DatabaseManager
         return database.rawQuery(query, null);
     }
 
+    public boolean deleteCommand(int commandId)
+    {
+        return database.delete("command", "id = " + commandId, null) > 0;
+    }
+
     public int findNextId(String database, String idColumn)
     {
         Cursor cursor = runQuery("SELECT MAX(" + idColumn + ") AS id FROM " + database + ";");

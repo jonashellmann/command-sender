@@ -74,6 +74,7 @@ public class SshCommander {
             String passphrase) throws JSchException
     {
         JSch jsch = new JSch();
+        System.out.println(privateKeyPath);
         jsch.addIdentity(privateKeyPath, passphrase);
         return jsch;
     }

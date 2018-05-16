@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseManager databaseManager;
     private TextView textView;
     private ListView listView;
+    private ListView listDeleteView;
     private Button button;
 
     @Override
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.buttonlistView);
+        listDeleteView = (ListView) findViewById(R.id.buttonlistDeleteView);
         textView = (TextView) findViewById(R.id.outputTextView);
         button = (Button) findViewById(R.id.button);
 
@@ -112,10 +114,27 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
-
                 sendCommand(
                         commandConfiguration.getCommand(),
                         commandConfiguration.getHostConfiguration());
+            }
+
+        });
+
+        ArrayAdapter<String> adapter2 =
+                new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_list_item_1,
+                        createDeletionListForDisplay());
+        listDeleteView.setAdapter(adapter2);
+        listDeleteView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
+                databaseManager.deleteCommand(commandConfiguration.getId());
+                createListView();
             }
 
         });
@@ -124,13 +143,20 @@ public class MainActivity extends AppCompatActivity {
 
     private List<String> createButtonListFromCommands()
     {
-
         ArrayList<String> list = new ArrayList<>();
         for(int i = 0; i < commandConfigurations.size(); i++){
             list.add(commandConfigurations.get(i).getName());
         }
         return list;
+    }
 
+    private List<String> createDeletionListForDisplay()
+    {
+        ArrayList<String> list = new ArrayList<>();
+        for(int i = 0; i < commandConfigurations.size(); i++){
+            list.add("X");
+        }
+        return list;
     }
 
     private void sendCommand(String command, HostConfiguration hostConfiguration)
@@ -161,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
 
         Cursor commandCursor = databaseManager.runQuery("SELECT * FROM command");
 
+        int idIndex = commandCursor.getColumnIndex("id");
         int commandIndex = commandCursor.getColumnIndex("command");
         int nameIndex = commandCursor.getColumnIndex("name");
         int hostConfigurationIdIndex = commandCursor.getColumnIndex("hostconfiguration");
@@ -173,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
 
                 commandConfigurations.add(
                         new CommandConfiguration(
+                                Integer.parseInt(commandCursor.getString(idIndex)),
                                 commandCursor.getString(commandIndex),
                                 commandCursor.getString(nameIndex),
                                 findHostById(commandCursor.getInt(hostConfigurationIdIndex))));
