@@ -110,21 +110,10 @@ public class MainActivity extends AppCompatActivity {
                         this,
                         createButtonListFromCommands(),
                         databaseManager,
-                        commandConfigurations);
+                        commandConfigurations,
+                        textView);
 
         listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
-                sendCommand(
-                        commandConfiguration.getCommand(),
-                        commandConfiguration.getHostConfiguration());
-            }
-
-        });
 
     }
 
@@ -132,48 +121,17 @@ public class MainActivity extends AppCompatActivity {
     {
         ArrayList<HashMap<String, String>> list = new ArrayList<>();
         for(int i = 0; i < commandConfigurations.size(); i++){
-            String commandname = commandConfigurations.get(i).getName();
-            String hostname = commandConfigurations.get(i).getHostConfiguration().getHost();
-            String username = commandConfigurations.get(i).getHostConfiguration().getUsername();
-            String info = commandname + " (" + username + "@" + hostname + ")";
-
             HashMap<String, String> map = new HashMap<>();
-            map.put("command", commandname);
-            map.put("info", info);
+            map.put("command", commandConfigurations.get(i).getName());
+            map.put(
+                    "info",
+                    commandConfigurations.get(i).getHostConfiguration().getHost()
+                            + "@"
+                            + commandConfigurations.get(i).getHostConfiguration().getUsername());
 
             list.add(map);
         }
         return list;
-    }
-
-    private List<String> createDeletionListForDisplay()
-    {
-        ArrayList<String> list = new ArrayList<>();
-        for(int i = 0; i < commandConfigurations.size(); i++){
-            list.add("X");
-        }
-        return list;
-    }
-
-    private void sendCommand(String command, HostConfiguration hostConfiguration)
-    {
-        SshCommander ssh = new SshCommander();
-        try{
-            List<String> lines =
-                    ssh.sendCommand(command, hostConfiguration);
-            StringBuilder stringBuilder = new StringBuilder();
-            for (String s : lines)
-            {
-                stringBuilder.append(s + "\n");
-            }
-            textView.setText(stringBuilder.toString());
-            Log.i("State", "No problem");
-        }
-        catch(Exception ex){
-            textView.setText(ex.getMessage());
-            Log.i("State", "Problem");
-            ex.printStackTrace();
-        }
     }
 
     private void readCommandConfiguration()
