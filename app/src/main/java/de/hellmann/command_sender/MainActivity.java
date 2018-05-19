@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hellmann.command_sender.configuration.ConfigurationActivity;
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseManager databaseManager;
     private TextView textView;
     private ListView listView;
-    private ListView listDeleteView;
     private Button button;
 
     @Override
@@ -51,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         listView = (ListView) findViewById(R.id.buttonlistView);
-        listDeleteView = (ListView) findViewById(R.id.buttonlistDeleteView);
         textView = (TextView) findViewById(R.id.outputTextView);
         button = (Button) findViewById(R.id.button);
 
@@ -106,8 +105,13 @@ public class MainActivity extends AppCompatActivity {
     {
 
         readCommandConfiguration();
+        LazyAdapter adapter =
+                new LazyAdapter(
+                        this,
+                        createButtonListFromCommands(),
+                        databaseManager,
+                        commandConfigurations);
 
-        ArrayAdapter<SpannableString> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, createButtonListFromCommands());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -122,39 +126,22 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        ArrayAdapter<String> adapter2 =
-                new ArrayAdapter<String >(
-                        this,
-                        android.R.layout.simple_list_item_1,
-                        createDeletionListForDisplay());
-        listDeleteView.setAdapter(adapter2);
-        listDeleteView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
-                databaseManager.deleteCommand(commandConfiguration.getId());
-                createListView();
-            }
-
-        });
-
     }
 
-    private List<SpannableString> createButtonListFromCommands()
+    private ArrayList<HashMap<String, String>> createButtonListFromCommands()
     {
-        ArrayList<SpannableString> list = new ArrayList<>();
+        ArrayList<HashMap<String, String>> list = new ArrayList<>();
         for(int i = 0; i < commandConfigurations.size(); i++){
             String commandname = commandConfigurations.get(i).getName();
             String hostname = commandConfigurations.get(i).getHostConfiguration().getHost();
             String username = commandConfigurations.get(i).getHostConfiguration().getUsername();
+            String info = commandname + " (" + username + "@" + hostname + ")";
 
-            String string = commandname + " (" + username + "@" + hostname + ")";
-            SpannableString spannableString = new SpannableString(string);
-            spannableString.setSpan(new RelativeSizeSpan(0.5f), commandname.length(), string.length(), 0);
+            HashMap<String, String> map = new HashMap<>();
+            map.put("command", commandname);
+            map.put("info", info);
 
-            list.add(spannableString);
+            list.add(map);
         }
         return list;
     }

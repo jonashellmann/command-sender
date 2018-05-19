@@ -27,13 +27,10 @@
             android:id="@+id/buttonlistView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.2" />
-
-        <ListView
-            android:id="@+id/buttonlistDeleteView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8" />
+            android:layout_weight="0.2"
+            android:divider="#b5b5b5"
+            android:dividerHeight="1dp"
+            android:listSelector="@drawable/list_selector"/>
 
     </LinearLayout>
 
