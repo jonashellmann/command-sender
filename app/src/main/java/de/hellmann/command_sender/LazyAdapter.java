@@ -27,6 +27,7 @@ public class LazyAdapter extends BaseAdapter
 {
 
     private Activity activity;
+    private MainActivity mainActivity;
     private ArrayList<HashMap<String, String>> data;
     private static LayoutInflater inflater = null;
     private DatabaseManager databaseManager;
@@ -35,12 +36,14 @@ public class LazyAdapter extends BaseAdapter
 
     public LazyAdapter(
             final Activity activity,
+            final MainActivity mainActivity,
             final ArrayList<HashMap<String, String>> data,
             final DatabaseManager databaseManager,
             final List<CommandConfiguration> commandConfigurations,
             final TextView textView)
     {
         this.activity = activity;
+        this.mainActivity = mainActivity;
         this.data = data;
         this.databaseManager = databaseManager;
         this.commandConfigurations = commandConfigurations;
@@ -96,6 +99,7 @@ public class LazyAdapter extends BaseAdapter
             public void onClick(View v) {
                 final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
                 databaseManager.deleteCommand(commandConfiguration.getId());
+                mainActivity.createListView();
             }
         });
 

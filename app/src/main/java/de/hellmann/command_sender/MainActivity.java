@@ -101,12 +101,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void createListView()
+    public void createListView()
     {
-
         readCommandConfiguration();
         LazyAdapter adapter =
                 new LazyAdapter(
+                        this,
                         this,
                         createButtonListFromCommands(),
                         databaseManager,
@@ -114,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
                         textView);
 
         listView.setAdapter(adapter);
-
     }
 
     private ArrayList<HashMap<String, String>> createButtonListFromCommands()
