@@ -82,16 +82,11 @@ public class LazyAdapter extends BaseAdapter
         command.setText(cmd.get("command"));
         info.setText(cmd.get("info"));
 
-        TextView executeView = (TextView) vi.findViewById(R.id.command);
-        executeView.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
-                sendCommand(
-                        commandConfiguration.getCommand(),
-                        commandConfiguration.getHostConfiguration());
-            }
-        });
+        TextView commandView = (TextView) vi.findViewById(R.id.command);
+        commandView.setOnClickListener(createClickListener(position));
+
+        TextView infoView = (TextView) vi.findViewById(R.id.info);
+        infoView.setOnClickListener(createClickListener(position));
 
         Button deleteBtn = (Button) vi.findViewById(R.id.delete_btn);
         deleteBtn.setOnClickListener(new View.OnClickListener(){
@@ -104,6 +99,18 @@ public class LazyAdapter extends BaseAdapter
         });
 
         return vi;
+    }
+
+    private View.OnClickListener createClickListener(final int position) {
+        return new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                final CommandConfiguration commandConfiguration = commandConfigurations.get(position);
+                sendCommand(
+                        commandConfiguration.getCommand(),
+                        commandConfiguration.getHostConfiguration());
+            }
+        };
     }
 
     private void sendCommand(String command, HostConfiguration hostConfiguration)
